@@ -1,0 +1,22 @@
+Steps 
+
+
+Download Docker
+add the docker bin in your Environment PATH variable
+Run docker-compose up on "docker-compose.yaml"
+
+
+Steps for laravel + mongodb
+git clone (link of the github repo)
+mv .env.example .env
+composer install
+php artisan key:generate
+php artisan migrate
+composer require laravel/ui
+php artisan ui react
+npm install
+npm run watch
+
+
+serving the server.js
+nodemon server.js
