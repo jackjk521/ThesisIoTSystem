@@ -5970,6 +5970,14 @@ var LoginRegister = function LoginRegister() {
 
             case 4:
               res = _context.sent;
+              (axios__WEBPACK_IMPORTED_MODULE_3___default()); //       const res = await axios.post("http://localhost:3001/register",  {
+              //                                       firstname,
+              //                                       lastname,
+              //                                       email,
+              //                                       password
+              //                                   }).then(response => {
+              //                                     console.log(response);
+              // ;                                 });
 
               if (res) {
                 console.log(res);
@@ -5983,20 +5991,20 @@ var LoginRegister = function LoginRegister() {
                 console.log(res);
               }
 
-              _context.next = 11;
+              _context.next = 12;
               break;
 
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](1);
               console.log(_context.t0);
 
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 8]]);
+      }, _callee, null, [[1, 9]]);
     }));
 
     return function signUp(_x) {
@@ -6018,6 +6026,12 @@ var LoginRegister = function LoginRegister() {
 
             case 4:
               res = _context2.sent;
+              // const res = await axios.post("http://localhost:3001/login", {
+              //                               params:{
+              //                                 email: Info.email,
+              //                                 password: Info.password
+              //                               }    
+              //                             });
               setInfo({
                 email: '',
                 password: ''

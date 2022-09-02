@@ -31,6 +31,17 @@ const LoginRegister = () => {
       // const res = await api.signUp(Info);
       const res = await axios.post("http://localhost:3001/register", Info);
 
+      axios.post("http://localhost:3001/register", {
+                  params:({
+                    firstname: Info.lastname,
+                    lastname: Info.lastname,
+                    email: Info.email,
+                    password: Info.password
+                    }).then(response => {
+                      console.log(response);
+                    })
+                  });
+
       if(res)
       {
         console.log(res);
@@ -56,6 +67,14 @@ const LoginRegister = () => {
 
     try{
       const res = await axios.post("http://localhost:3001/login", Info);
+      // const res = await axios.post("http://localhost:3001/login", {
+      //                               params:{
+      //                                 email: Info.email,
+      //                                 password: Info.password
+      //                               }    
+      //                             });
+
+      
           setInfo({
               email: '',
               password: '',
