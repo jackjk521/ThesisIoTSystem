@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
+    public function index(Request $req)
+    {
+        console.log("successfully authenticated");
+
+    }
     
     public function register(Request $req)
     {

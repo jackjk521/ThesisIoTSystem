@@ -20,7 +20,7 @@ use App\Http\Controllers\ProductController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/dashboard', function () {
+Route::get('/protected', function () {
     return view('welcome');
 });
 

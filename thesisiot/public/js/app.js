@@ -5852,31 +5852,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/js/components/Dashboard.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/Dashboard.js ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Dashboard)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-function Dashboard() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h1", {
-      children: "dashboard area"
-    })
-  });
-}
-
-/***/ }),
-
 /***/ "./resources/js/components/LoginRegister.js":
 /*!**************************************************!*\
   !*** ./resources/js/components/LoginRegister.js ***!
@@ -5954,7 +5929,24 @@ var LoginRegister = function LoginRegister() {
     setInfo(function (prevState) {
       return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty({}, name, value));
     });
-  };
+  }; //added to avoid loginging in again after being authenticated
+
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var token = localStorage.getItem('token');
+    console.log(token);
+    axios__WEBPACK_IMPORTED_MODULE_3___default().get("http://localhost:3001/protected", {
+      headers: {
+        Authorization: token
+      }
+    }).then(function (res) {
+      console.log(res);
+      navigate('/protected');
+    })["catch"](function (err) {
+      console.log(err);
+      navigate('/');
+    });
+  }, []);
 
   var signUp = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
@@ -5971,16 +5963,6 @@ var LoginRegister = function LoginRegister() {
             case 4:
               res = _context.sent;
 
-              // axios.post("http://localhost:3001/register", {
-              //             params:({
-              //               firstname: Info.lastname,
-              //               lastname: Info.lastname,
-              //               email: Info.email,
-              //               password: Info.password
-              //               }).then(response => {
-              //                 console.log(response);
-              //               })
-              //             });
               if (res) {
                 console.log(res);
                 setInfo({
@@ -6016,7 +5998,7 @@ var LoginRegister = function LoginRegister() {
 
   var login = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
-      var res;
+      var res, localToken;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -6028,31 +6010,30 @@ var LoginRegister = function LoginRegister() {
 
             case 4:
               res = _context2.sent;
-              // const res = await axios.post("http://localhost:3001/login", {
-              //                               params:{
-              //                                 email: Info.email,
-              //                                 password: Info.password
-              //                               }    
-              //                             });
-              setInfo({
-                email: '',
-                password: ''
-              });
-              navigate('/dashboard');
-              _context2.next = 12;
+
+              if (res.data.route === "Login") {
+                setInfo({
+                  email: '',
+                  password: ''
+                });
+                localToken = localStorage.setItem('token', res.data.token); // need to trest
+                // console.log(localStorage.getItem('token')); //check if works
+              }
+
+              _context2.next = 11;
               break;
 
-            case 9:
-              _context2.prev = 9;
+            case 8:
+              _context2.prev = 8;
               _context2.t0 = _context2["catch"](1);
               console.log(_context2.t0);
 
-            case 12:
+            case 11:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 9]]);
+      }, _callee2, null, [[1, 8]]);
     }));
 
     return function login(_x2) {
@@ -6189,7 +6170,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap_dist_js_bootstrap_bundle_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap/dist/js/bootstrap.bundle.js */ "./node_modules/bootstrap/dist/js/bootstrap.bundle.js");
 /* harmony import */ var bootstrap_dist_js_bootstrap_bundle_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_js_bootstrap_bundle_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _LoginRegister__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./LoginRegister */ "./resources/js/components/LoginRegister.js");
-/* harmony import */ var _Dashboard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Dashboard */ "./resources/js/components/Dashboard.js");
+/* harmony import */ var _Protected__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Protected */ "./resources/js/components/Protected.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
@@ -6208,8 +6189,8 @@ function Main() {
           path: "/",
           element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_LoginRegister__WEBPACK_IMPORTED_MODULE_4__["default"], {})
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
-          path: "/dashboard",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Dashboard__WEBPACK_IMPORTED_MODULE_5__["default"], {})
+          path: "/protected",
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Protected__WEBPACK_IMPORTED_MODULE_5__["default"], {})
         })]
       })
     })
@@ -6219,6 +6200,54 @@ function Main() {
 if (document.getElementById('main')) {
   react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Main, {}), document.getElementById('main'));
 }
+
+/***/ }),
+
+/***/ "./resources/js/components/Protected.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/Protected.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+
+function Protected() {
+  var navigate = (0,react_router__WEBPACK_IMPORTED_MODULE_3__.useNavigate)();
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    var token = localStorage.getItem('token');
+    console.log(token);
+    axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://localhost:3001/protected", {
+      headers: {
+        Authorization: token
+      }
+    }).then(function (res) {
+      console.log(res);
+    })["catch"](function (err) {
+      console.log(err);
+      navigate('/');
+    });
+  }, []);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+      children: " Protected "
+    })
+  });
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Protected);
 
 /***/ }),
 

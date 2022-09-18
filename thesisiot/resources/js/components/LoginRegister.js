@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , {useState, useEffect} from "react";
 import "../../css/LoginRegister.css";
 import api from "../api/api";
 import axios from "axios";
@@ -24,23 +24,31 @@ const LoginRegister = () => {
     }))
 }
 
+//added to avoid loginging in again after being authenticated
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  console.log(token)
+
+  axios.get("http://localhost:3001/protected", {
+      headers : {
+          Authorization : token,
+      }
+  }).then(res =>  {
+      console.log(res)
+      navigate('/protected')
+  }).catch(err => {
+      console.log(err)
+      navigate('/')
+  })
+}, [])
+
+
   const signUp = async (e) =>{
     e.preventDefault();
 
     try{
       // const res = await api.signUp(Info);
       const res = await axios.post("http://localhost:3001/register", Info);
-
-      // axios.post("http://localhost:3001/register", {
-      //             params:({
-      //               firstname: Info.lastname,
-      //               lastname: Info.lastname,
-      //               email: Info.email,
-      //               password: Info.password
-      //               }).then(response => {
-      //                 console.log(response);
-      //               })
-      //             });
 
       if(res)
       {
@@ -67,19 +75,17 @@ const LoginRegister = () => {
 
     try{
       const res = await axios.post("http://localhost:3001/login", Info);
-      // const res = await axios.post("http://localhost:3001/login", {
-      //                               params:{
-      //                                 email: Info.email,
-      //                                 password: Info.password
-      //                               }    
-      //                             });
-
       
+      if(res.data.route === ("Login")){
           setInfo({
-              email: '',
-              password: '',
-          });
-          navigate('/dashboard');    
+            email: '',
+            password: '',
+        });
+
+        const localToken = localStorage.setItem('token', res.data.token); // need to trest
+        // console.log(localStorage.getItem('token')); //check if works
+      }
+    
     }
     catch(err){
       console.log(err);

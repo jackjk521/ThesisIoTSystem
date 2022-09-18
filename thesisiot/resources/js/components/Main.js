@@ -4,9 +4,7 @@ import {BrowserRouter, Routes, Route, Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import LoginRegister from './LoginRegister'
-import Dashboard from './Dashboard'
-
-
+import Protected from './Protected'
 
 export default function Main() {
    
@@ -15,8 +13,7 @@ export default function Main() {
                 <div>
                     <Routes>
                         <Route path="/" element = {<LoginRegister/>}/> 
-                        <Route path="/dashboard" element = {<Dashboard/>}/>
-
+                        <Route path="/protected" element = {<Protected/>}/>
                     </Routes>
                 </div>
             </BrowserRouter>

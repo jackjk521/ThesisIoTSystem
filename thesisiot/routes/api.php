@@ -15,8 +15,10 @@ use App\Http\Controllers\LoginController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/signUp', [LoginController::class, 'register']); // route for registration form
-Route::post('/login', [LoginController::class, 'login']); // route for login form
+// Route::post('/signUp', [LoginController::class, 'register']); // route for registration form
+// Route::post('/login', [LoginController::class, 'login']); // route for login form
+// no used cux=z it gets direct to userroute
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
