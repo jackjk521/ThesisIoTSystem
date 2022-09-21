@@ -7,7 +7,7 @@ function Protected() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        console.log(token)
+        // console.log(token) // for testing
 
         axios.get("http://localhost:3001/protected", {
             headers : {

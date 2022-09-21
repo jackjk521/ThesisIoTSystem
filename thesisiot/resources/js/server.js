@@ -15,7 +15,7 @@ require('./passport')
 //connect to mongodb
 mongoose.connect(process.env.DB_ACCESS, () => console.log("DB connected"));
 //require user routes
-app.use("/", require("./routes/userRoute"));
+app.use("/", require("../js/routes/userRoute"));
 
 //protected route 
 app.get("/protected", passport.authenticate('jwt', {session:false}), (req, res) =>{

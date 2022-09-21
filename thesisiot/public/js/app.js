@@ -6018,6 +6018,8 @@ var LoginRegister = function LoginRegister() {
                 });
                 localToken = localStorage.setItem('token', res.data.token); // need to trest
                 // console.log(localStorage.getItem('token')); //check if works
+
+                navigate('/protected'); // navigate to the protected page
               }
 
               _context2.next = 11;
@@ -6227,8 +6229,8 @@ __webpack_require__.r(__webpack_exports__);
 function Protected() {
   var navigate = (0,react_router__WEBPACK_IMPORTED_MODULE_3__.useNavigate)();
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    var token = localStorage.getItem('token');
-    console.log(token);
+    var token = localStorage.getItem('token'); // console.log(token) // for testing
+
     axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://localhost:3001/protected", {
       headers: {
         Authorization: token

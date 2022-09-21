@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Jenssegers\Mongodb\Eloquent\Model;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -19,11 +21,10 @@ class User extends Authenticatable
     protected $fillable = [
         'firstName',
         'lastName',
-        'user_contact',
         'email_add',
         'password',
-        'level_name'
     ];
+    
     protected $table = 'users';
 
     protected $primaryKey = 'user_id';

@@ -59,6 +59,7 @@ useEffect(() => {
             email:'',
             password:'',
           });
+         
       }
       else{
             console.log(res);
@@ -80,10 +81,12 @@ useEffect(() => {
           setInfo({
             email: '',
             password: '',
-        });
-
+      });
         const localToken = localStorage.setItem('token', res.data.token); // need to trest
         // console.log(localStorage.getItem('token')); //check if works
+
+        navigate('/protected') // navigate to the protected page
+
       }
     
     }

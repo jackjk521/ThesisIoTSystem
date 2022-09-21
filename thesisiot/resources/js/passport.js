@@ -1,7 +1,7 @@
 const JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt; // to extract the token from the url
 const opts = {}
-const UserModel = require("./app/Models/usermodel");
+const UserModel = require("../../app/Models/UserModel");
 const passport = require("passport")
  
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(); // extrat without bearer and authenticate if it is JWT
