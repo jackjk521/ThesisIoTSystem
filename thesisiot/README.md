@@ -30,3 +30,7 @@ Files to look at:
 userRoutes.js under routes folder
 server.js under the root folder
 LoginRegister.js under components
+
+
+composer fixes:
+update/install --ignore-platform-reqs 
