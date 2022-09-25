@@ -46,8 +46,8 @@ return [
         // edits for mongodb setup in laravel
         'mongodb' => [
             'driver'  => 'mongodb',
-            'dsn' => 'mongodb+srv://thesisIOT:thesisiot12345@thesisdatabase.5rw1k.mongodb.net/thesisiot',
-            'database'=> 'sample',
+            'dsn' => env('DB_ACCESS'),
+            'database'=> env('DB_DATABASE', 'sample'),
         ],  
 
         // edits for mongodb setup in laravel (OLDER)
