@@ -53,7 +53,10 @@ router.route("/login").post((req, res) => {
                     })
             }
 
-            // if(bcrypt.compareSync(req.body.password, userLogin.password)){ //incorrect password
+            // const validPassword = bcrypt.compareSync(req.body.password, user.password);
+            // console.log(validPassword);
+
+            // if(bcrypt.compareSync(req.body.password, user.password)){ //incorrect password
             //     return res.status(401).send({
             //         success: false, 
             //         message: "Incorrect password"
@@ -91,5 +94,17 @@ router.route("/protected").get(passport.authenticate('jwt', {session:false}), (r
         }
     })
 })
+
+
+
+router.route("/displayUsers").get((req, res) => { 
+    
+    User.find({}).then(users => {
+        res.status(200).send({
+            success: true, 
+            users: users
+            })
+        })
+    }) 
 
 module.exports = router;

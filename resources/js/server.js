@@ -14,20 +14,9 @@ require('./passport')
 
 //connect to mongodb
 mongoose.connect(process.env.DB_ACCESS, () => console.log("DB connected"));
+
 //require user routes
 app.use("/", require("../js/routes/userRoute"));
-
-//protected route 
-app.get("/protected", passport.authenticate('jwt', {session:false}), (req, res) =>{
-    res.status(200).send({
-        success: true, 
-        user: {
-            id : req.user._id,
-            email : req.user.email
-        }
-    })
-})
-
 
 app.listen(3001, function(){
     console.log("server is running at port 3001");

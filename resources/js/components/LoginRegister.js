@@ -48,8 +48,6 @@ useEffect(() => {
     try{
       // const res = await api.signUp(Info);
       const res = await axios.post("http://localhost:3001/register", Info);
-      console.log(res);
-      
       if(res.data.status === ("success"))
       {
          setInfo({
@@ -77,7 +75,7 @@ useEffect(() => {
     try{
       const res = await axios.post("http://localhost:3001/login", Info);
       
-      if(res.data.success === ("true")){
+      if(res.data.success === true){
           setInfo({
             email: '',
             password: '',
