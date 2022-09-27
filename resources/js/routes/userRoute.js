@@ -7,27 +7,23 @@ const passport = require("passport")
 
 router.route("/register").post((req, res) =>{ // works
     const user = User({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
+        name: req.body.name,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password)
     }) // using model instead of an object
-        
+
     try{
         if(User.findOne({email: user.email}) > 0){   // neeed to fix this for no repetition of emails
             console.log("User already exists, try another email");
         }
+
         else{
 
             user.save().then (user => {
                 res.send({
                     success: true, 
                     message: "User created successfully.",
-                    user:{
-                        firstname : user.firstname,
-                        lastname : user.lastname,
-                        email : user.email
-                    }
+                    user: user
                 })
             }).catch(err =>{
                 res.send({

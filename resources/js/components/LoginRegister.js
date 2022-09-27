@@ -9,8 +9,7 @@ const LoginRegister = () => {
   const navigate = useNavigate();
 
   const [Info, setInfo] = useState({
-    firstname:'',
-    lastname:'',
+    name:'',
     email:'',
     password:'',
   });
@@ -49,13 +48,12 @@ useEffect(() => {
     try{
       // const res = await api.signUp(Info);
       const res = await axios.post("http://localhost:3001/register", Info);
-
-      if(res)
+      console.log(res);
+      
+      if(res.data.status === ("success"))
       {
-        console.log(res);
          setInfo({
-            firstname:'',
-            lastname:'',
+            name:'',
             email:'',
             password:'',
           });
@@ -66,7 +64,9 @@ useEffect(() => {
       }
     }
     catch(err){
-            console.log(err);
+      if( err.response.status === 422){
+        console.log(err.response.data.errors);
+      }   
     }
    
   }
@@ -77,12 +77,12 @@ useEffect(() => {
     try{
       const res = await axios.post("http://localhost:3001/login", Info);
       
-      if(res.data.route === ("Login")){
+      if(res.data.success === ("true")){
           setInfo({
             email: '',
             password: '',
       });
-        const localToken = localStorage.setItem('token', res.data.token); // need to trest
+        const localToken = localStorage.setItem('token', res.data.token); 
         // console.log(localStorage.getItem('token')); //check if works
 
         navigate('/protected') // navigate to the protected page
@@ -102,8 +102,7 @@ useEffect(() => {
               
               <form className="LRForm" onSubmit = {signUp}>
                 <h1 className="header1">Create Account</h1>
-                <input className ="inputBox" name = 'firstname' type="text"  onChange={handleInput} value={Info.firstname || ""} placeholder="FIRST NAME" />
-                <input className ="inputBox" name = 'lastname' type="text"  onChange={handleInput} value={Info.lastname || ""} placeholder="LAST NAME" />
+                <input className ="inputBox" name = 'name' type="text"  onChange={handleInput} value={Info.name || ""} placeholder="John Doe" />
                 <input className ="inputBox" name = 'email' type="email" onChange={handleInput} value={Info.email || ""}   placeholder="EMAIL" />
                 <input className ="inputBox"  name = 'password' type="password" onChange={handleInput} value={Info.password || ""}  placeholder="PASSWORD" />
                 <button className="loginRegbuttons" type="submit"> REGISTER </button>
