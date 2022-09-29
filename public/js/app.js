@@ -5962,7 +5962,7 @@ var LoginRegister = function LoginRegister() {
             case 4:
               res = _context.sent;
 
-              if (res.data.status === "success") {
+              if (res.status == 200) {
                 setInfo({
                   name: '',
                   email: '',
@@ -6011,7 +6011,7 @@ var LoginRegister = function LoginRegister() {
             case 4:
               res = _context2.sent;
 
-              if (res.data.success === true) {
+              if (res.status == 200) {
                 setInfo({
                   email: '',
                   password: ''
