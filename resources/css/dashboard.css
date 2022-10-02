@@ -1,0 +1,23 @@
+.Dashboard {
+    margin: 50px;
+}
+
+.form-thing-info {
+    width: 450px;
+    margin: 5px;
+    padding: 10px;
+}
+
+.add-button {
+    float: right;
+}
+
+.thingType {
+    border: solid black 1px;
+}
+
+.logout-btn {
+    position:absolute;
+    right:50px;
+    top:50px;
+}
