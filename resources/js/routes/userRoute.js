@@ -69,11 +69,8 @@ router.route("/login").post((req, res) => {
                 id : user._id
             }
     
-            //random string (secretorPrivatekey) - can be changed to robust
-    
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn : "1d"} ) 
-            
-                // console.log(res);
+        
                 return res.status(200).send({
                     user_id : user.id,
                     success: true,
@@ -95,17 +92,5 @@ router.route("/dashboard").get(passport.authenticate('jwt', {session:false}), (r
         }
     })
 })
-
-
-
-router.route("/displayUsers").get((req, res) => { 
-    
-    User.find({}).then(users => {
-        res.status(200).send({
-            success: true, 
-            users: users
-            })
-        })
-    }) 
 
 module.exports = router;

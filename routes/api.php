@@ -30,7 +30,6 @@ Route::get('/getThings', [ThingController::class, 'getThings']);
 Route::get('/findThing', [ThingController::class, 'findThing']);
 Route::patch('/updateThing', [ThingController::class, 'updateThing']);
 Route::post('/deleteThing', [ThingController::class, 'deleteThing']);
-// Route::post('/register', [Login_RegistrationController::class, 'register']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

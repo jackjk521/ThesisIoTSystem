@@ -46,6 +46,8 @@ const Login = () => {
                 password: '',
             });
 
+            // adding the JWS token in a sessionStorage
+            sessionStorage.setItem('token', res.data.token);
             navigate("/dashboard");
         } else {
             addMessage(res.data.message, 'error');
@@ -53,6 +55,22 @@ const Login = () => {
     }
 
     useEffect(() => {
+
+        // for Passport JWS token retrieval
+        const token = localStorage.getItem('token');
+        axios.get("http://localhost:3001/dashboard", {
+            headers : {
+                Authorization : token,
+            }
+          }).then(res =>  {
+              console.log(res)
+              navigate('/dashboard')
+          }).catch(err => {
+              console.log(err)
+              navigate('/')
+          })
+     
+        // Change between SignIn and SignOut forms
         const signUpButton = document.getElementById('signUp');
         const signInButton = document.getElementById('signIn');
         const container = document.getElementById('container');

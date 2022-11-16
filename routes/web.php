@@ -27,10 +27,6 @@ Route::get('/dashboard', function () {
 Route::post('/clients/token', function () {
     return view('welcome');
 });
-//View for pages
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
 
