@@ -24,13 +24,14 @@ const Login = () => {
         e.preventDefault(); 
         // const res = await axios.post('http://127.0.0.1:8000/api/signUp', credentials);
         const res = await axios.post('http://localhost:3001/register', credentials);
-        console.log(res) // not work
-        if(res.data.status === 200) {
+
+        if(res.data.success) {
             addMessage(res.data.data, 'success');
             setCredentials({
             username : '',
             password : ''
             });
+            console.log("works here")
         } else{
             addMessage(res.data.data, 'error');
         }
@@ -41,15 +42,12 @@ const Login = () => {
     
         // const res = await axios.post('http://127.0.0.1:8000/api/signIn', credentials);
         const res = await axios.post('http://localhost:3001/login', credentials);
-      
-        console.log(res.data.success) // wont show idk why
         if(res.data.success === true) {
             sessionStorage.setItem('user_id', res.data.data);
             setCredentials({
                 username: '',
                 password: '',
             });
-            console.log(res.data);
             // adding the JWS token in a localStorage
             const token = localStorage.setItem('token', res.data.token);
             console.log(token)
