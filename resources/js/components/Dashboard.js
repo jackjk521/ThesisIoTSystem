@@ -64,8 +64,21 @@ const Main = () => {
     navigate('/');
   } 
 
-
   useEffect(async () => {
+    const token = localStorage.getItem('token');
+    console.log(token) // for testing
+
+    axios.get("http://localhost:3001/dashboard", {
+        headers : {
+            Authorization : token,
+        }
+    }).then(res =>  {
+        console.log(res)
+    }).catch(err => {
+        console.log(err)
+        navigate('/')
+    })
+
     const req = {
       params : {
         user_id : sessionStorage.getItem('user_id')

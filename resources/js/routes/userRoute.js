@@ -7,14 +7,13 @@ const passport = require("passport")
 
 router.route("/register").post((req, res) =>{ // works
     const user = User({
-        name: req.body.name,
-        email: req.body.email,
+        username: req.body.username,
         password: bcrypt.hashSync(req.body.password)
-    }) // using model instead of an object
+    }) 
 
     try{
-        if(User.findOne({email: user.email}) > 0){   // neeed to fix this for no repetition of emails
-            console.log("User already exists, try another email");
+        if(User.findOne({username: user.username}) > 0){  
+            console.log("User already exists, try another username");
         }
 
         else{
@@ -44,7 +43,7 @@ router.route("/register").post((req, res) =>{ // works
 
 router.route("/login").post((req, res) => {
     
-        User.findOne({ email: req.body.email }).then(user => {
+        User.findOne({ username: req.body.username }).then(user => {
 
             if(!user){ // No user found
                     return res.status(401).send({
@@ -53,34 +52,34 @@ router.route("/login").post((req, res) => {
                     })
             }
 
-            // const validPassword = bcrypt.compareSync(req.body.password, user.password);
-            // console.log(validPassword);
+            // password validation 
 
-            // if(bcrypt.compareSync(req.body.password, user.password)){ //incorrect password
-            //     return res.status(401).send({
-            //         success: false, 
-            //         message: "Incorrect password"
-            //     })
-            // } //error in comparing fix later
+            const validPassword = bcrypt.compareSync(req.body.password, user.password);
+            if(!validPassword){ // if incorrect password
+                return res.status(401).send({
+                    success: false, 
+                    message: "Incorrect password"
+                })
+            } 
+            else{
+                const payload =  {
+                    username : user.username,
+                    id : user._id
+                }
+        
+                const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn : "1d"} ) 
 
-        
-            const payload =  {
-                email : user.email,
-                id : user._id
-            }
-    
-            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn : "1d"} ) 
-        
-                return res.status(200).send({
-                    user_id : user.id,
-                    success: true,
-                    message: "Logged in successfully.",
-                    route: "Login", 
-                    token: "Bearer " + token
-                    })
-            
+                    return res.status(200).send({
+                        user_id : user.id,
+                        success: true,
+                        message: "Logged in successfully for testing message", //works
+                        route: "Login", 
+                        token: "Bearer " + token
+                        })
+
+                }
+                
         })
-
 })
 
 router.route("/dashboard").get(passport.authenticate('jwt', {session:false}), (req, res) => { 
@@ -88,7 +87,7 @@ router.route("/dashboard").get(passport.authenticate('jwt', {session:false}), (r
         success: true, 
         user: {
             id : req.user._id,
-            email : req.user.email
+            username : req.user.username
         }
     })
 })

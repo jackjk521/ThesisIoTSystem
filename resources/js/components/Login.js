@@ -20,9 +20,11 @@ const Login = () => {
         }))
     }
 
-    const signUp = async (e) =>{
-        e.preventDefault();
-        const res = await axios.post('http://127.0.0.1:8000/api/signUp', credentials);
+    const signUp = async (e) =>{ //works
+        e.preventDefault(); 
+        // const res = await axios.post('http://127.0.0.1:8000/api/signUp', credentials);
+        const res = await axios.post('http://localhost:3001/register', credentials);
+        console.log(res) // not work
         if(res.data.status === 200) {
             addMessage(res.data.data, 'success');
             setCredentials({
@@ -37,17 +39,20 @@ const Login = () => {
     const signIn = async (e) =>{
         e.preventDefault();
     
-        const res = await axios.post('http://127.0.0.1:8000/api/signIn', credentials);
-
-        if(res.data.status === 200) {
+        // const res = await axios.post('http://127.0.0.1:8000/api/signIn', credentials);
+        const res = await axios.post('http://localhost:3001/login', credentials);
+      
+        console.log(res.data.success) // wont show idk why
+        if(res.data.success === true) {
             sessionStorage.setItem('user_id', res.data.data);
             setCredentials({
                 username: '',
                 password: '',
             });
-
-            // adding the JWS token in a sessionStorage
-            sessionStorage.setItem('token', res.data.token);
+            console.log(res.data);
+            // adding the JWS token in a localStorage
+            const token = localStorage.setItem('token', res.data.token);
+            console.log(token)
             navigate("/dashboard");
         } else {
             addMessage(res.data.message, 'error');
