@@ -8083,19 +8083,19 @@ var Login = function Login() {
 
             case 3:
               res = _context.sent;
-              console.log(res); // not work
 
-              if (res.data.status === 200) {
+              if (res.data.success) {
                 addMessage(res.data.data, 'success');
                 setCredentials({
                   username: '',
                   password: ''
                 });
+                console.log("works here");
               } else {
                 addMessage(res.data.data, 'error');
               }
 
-            case 6:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -8122,15 +8122,13 @@ var Login = function Login() {
 
             case 3:
               res = _context2.sent;
-              console.log(res.data.success); // wont show idk why
 
               if (res.data.success === true) {
                 sessionStorage.setItem('user_id', res.data.data);
                 setCredentials({
                   username: '',
                   password: ''
-                });
-                console.log(res.data); // adding the JWS token in a localStorage
+                }); // adding the JWS token in a localStorage
 
                 token = localStorage.setItem('token', res.data.token);
                 console.log(token);
@@ -8139,7 +8137,7 @@ var Login = function Login() {
                 addMessage(res.data.message, 'error');
               }
 
-            case 6:
+            case 5:
             case "end":
               return _context2.stop();
           }

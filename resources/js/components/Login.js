@@ -58,7 +58,6 @@ const Login = () => {
     }
 
     useEffect(() => {
-
         // for Passport JWS token retrieval
         const token = localStorage.getItem('token');
         axios.get("http://localhost:3001/dashboard", {
