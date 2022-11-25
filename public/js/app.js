@@ -7726,18 +7726,23 @@ var Main = function Main() {
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
-      things = _useState2[0],
-      setThings = _useState2[1];
+      test = _useState2[0],
+      setTest = _useState2[1];
 
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      thingName = _useState4[0],
-      setThingName = _useState4[1];
+      things = _useState4[0],
+      setThings = _useState4[1];
 
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('led'),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
       _useState6 = _slicedToArray(_useState5, 2),
-      thingType = _useState6[0],
-      setThingType = _useState6[1];
+      thingName = _useState6[0],
+      setThingName = _useState6[1];
+
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('led'),
+      _useState8 = _slicedToArray(_useState7, 2),
+      thingType = _useState8[0],
+      setThingType = _useState8[1];
 
   var _useMessageQueue = (0,_MessageQueue__WEBPACK_IMPORTED_MODULE_4__.useMessageQueue)(),
       addMessage = _useMessageQueue.addMessage,
@@ -7753,6 +7758,12 @@ var Main = function Main() {
   });
   var localhost = 'http://127.0.0.1:8000/api';
   var proxy = 'http://localhost:8080'; // const bearer = localStorage.getItem('token');
+
+  var config = {
+    headers: {
+      'Authorization': localStorage.getItem('token')
+    }
+  };
 
   var thingNameHandler = function thingNameHandler(e) {
     setThingName(e.target.value);
@@ -7819,14 +7830,13 @@ var Main = function Main() {
     navigate('/');
   };
 
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     var token, req, res, thingList, sensors;
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
-            token = localStorage.getItem('token');
-            console.log(token); // for testing
+            token = localStorage.getItem('token'); // console.log(token) // for testing
 
             axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://localhost:3001/dashboard", {
               headers: {
@@ -7837,88 +7847,116 @@ var Main = function Main() {
             })["catch"](function (err) {
               console.log(err);
               navigate('/');
-            });
+            }); // console.log(`userId: ${sessionStorage.getItem('user_id')}`)
+
             req = {
               params: {
                 user_id: sessionStorage.getItem('user_id')
               }
             };
-            _context3.next = 6;
-            return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(proxy, "/").concat(localhost, "/getThings"), req);
+            _context2.next = 5;
+            return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(proxy, "/").concat(localhost, "/getThings"), req, config);
 
-          case 6:
-            res = _context3.sent;
+          case 5:
+            res = _context2.sent;
             thingList = res.data;
-            sensors = ['sound', 'temp', 'motion', 'heart'];
+            console.log(thingList);
+            setThings(thingList);
+            setTest(thingList);
+            console.log(thingList);
+            sensors = ['led', 'sound', 'temp', 'motion', 'heart'];
             thingList.map(function (thing) {
               sensors.forEach(function (sensor) {
                 if (thing[sensor] != 'null') {
-                  client.subscribe("".concat(thing.name, "/").concat(sensor));
-                  console.log("subscribed to ".concat(thing.name, "/").concat(sensor));
+                  client.subscribe("/".concat(thing.name, "/").concat(sensor));
+                  console.log("subscribed to /".concat(thing.name, "/").concat(sensor));
                 }
               });
             });
-            client.on('message', /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(topic, message) {
-                var topicArr, res, update, current;
-                return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+
+          case 13:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  })), []);
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var fun;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            console.log("thing list updated");
+            console.log(things);
+
+            fun = /*#__PURE__*/function () {
+              var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(topic, message) {
+                var topicArr, res, msg, update, current;
+                return _regeneratorRuntime().wrap(function _callee3$(_context3) {
                   while (1) {
-                    switch (_context2.prev = _context2.next) {
+                    switch (_context3.prev = _context3.next) {
                       case 0:
+                        console.log('message received');
+                        console.log(test);
                         topicArr = topic.split('/');
-                        _context2.next = 3;
-                        return axios__WEBPACK_IMPORTED_MODULE_0___default().get('findThing', {
+                        _context3.next = 5;
+                        return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(proxy, "/").concat(localhost, "/findThing"), {
                           params: {
-                            'name': topicArr[0]
+                            'name': topicArr[1]
                           }
                         });
 
-                      case 3:
-                        res = _context2.sent;
+                      case 5:
+                        res = _context3.sent;
+                        msg = message.toString();
 
                         if (!(res.data.status == 200)) {
-                          _context2.next = 8;
+                          _context3.next = 12;
                           break;
                         }
 
-                        _context2.next = 7;
-                        return axios__WEBPACK_IMPORTED_MODULE_0___default().patch('updateThing', {
-                          'name': topicArr[0],
+                        console.log(message.toString());
+                        _context3.next = 11;
+                        return axios__WEBPACK_IMPORTED_MODULE_0___default().patch("".concat(proxy, "/").concat(localhost, "/updateThing"), {
+                          'name': topicArr[1],
                           'sensor': topicArr[1],
-                          'value': message
+                          'value': msg
                         });
 
-                      case 7:
-                        update = _context2.sent;
-
-                      case 8:
-                        current = things;
-                        current.find(function (thing) {
-                          return thing.name === topicArr[0];
-                        })[topicArr[1]] = message;
-                        setThings(_toConsumableArray(current));
-
                       case 11:
+                        update = _context3.sent;
+
+                      case 12:
+                        current = things;
+                        console.log(current);
+                        console.log(current.find(function (thing) {
+                          return thing.name === topicArr[1];
+                        })); // current.find(thing => thing.name === topicArr[1])[topicArr[2]] = msg;
+                        // setThings([...current]);
+
+                      case 15:
                       case "end":
-                        return _context2.stop();
+                        return _context3.stop();
                     }
                   }
-                }, _callee2);
+                }, _callee3);
               }));
 
-              return function (_x, _x2) {
-                return _ref3.apply(this, arguments);
+              return function fun(_x, _x2) {
+                return _ref4.apply(this, arguments);
               };
-            }());
-            setThings(thingList);
+            }();
 
-          case 12:
+            client.on('message', fun);
+
+          case 4:
           case "end":
-            return _context3.stop();
+            return _context4.stop();
         }
       }
-    }, _callee3);
-  })), []); //added to avoid loginging in again after being authenticated
+    }, _callee4);
+  })), [things]); //added to avoid loginging in again after being authenticated
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var token = localStorage.getItem('token');
@@ -7981,7 +8019,8 @@ var Main = function Main() {
       children: " Logout "
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Things__WEBPACK_IMPORTED_MODULE_2__["default"], {
       things: things,
-      setThings: setThings
+      setThings: setThings,
+      client: client
     })]
   });
 };
@@ -8083,19 +8122,19 @@ var Login = function Login() {
 
             case 3:
               res = _context.sent;
-              console.log(res); // not work
 
-              if (res.data.status === 200) {
+              if (res.data.success) {
                 addMessage(res.data.data, 'success');
                 setCredentials({
                   username: '',
                   password: ''
                 });
+                console.log("works here");
               } else {
                 addMessage(res.data.data, 'error');
               }
 
-            case 6:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -8122,24 +8161,24 @@ var Login = function Login() {
 
             case 3:
               res = _context2.sent;
-              console.log(res.data.success); // wont show idk why
 
               if (res.data.success === true) {
                 sessionStorage.setItem('user_id', res.data.data);
                 setCredentials({
                   username: '',
                   password: ''
-                });
-                console.log(res.data); // adding the JWS token in a localStorage
+                }); // adding the JWS token in a localStorage
 
-                token = localStorage.setItem('token', res.data.token);
+                token = localStorage.setItem('token', res.data.token); // console.log(`userId: ${res.data.user_id}`)
+
+                sessionStorage.setItem('user_id', res.data.user_id);
                 console.log(token);
                 navigate("/dashboard");
               } else {
                 addMessage(res.data.message, 'error');
               }
 
-            case 6:
+            case 5:
             case "end":
               return _context2.stop();
           }
@@ -8522,6 +8561,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _css_Things_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../css/Things.css */ "./resources/css/Things.css");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
+
 
 
 
@@ -8529,7 +8570,16 @@ __webpack_require__.r(__webpack_exports__);
 
 var Things = function Things(_ref) {
   var things = _ref.things,
-      setThings = _ref.setThings;
+      setThings = _ref.setThings,
+      client = _ref.client;
+
+  var toggleButton = function toggleButton(thing) {
+    console.log(thing.led === '-1' ? "1" : parseInt(thing.led).toString());
+    client.publish("/".concat(thing.name, "/led"), thing.led === '-1' ? "1" : parseInt(thing.led).toString(), function (err) {
+      console.log(err ? err : "success");
+    });
+  };
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     className: "things",
     children: things.length > 0 ? things.map(function (thing) {
@@ -8538,8 +8588,15 @@ var Things = function Things(_ref) {
           children: [" Name: ", thing.name, " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "modules",
-          children: [thing.led === 'null' ? '' : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
-            children: [" Light: ", thing.led === '-1' ? 'not set' : thing.led, " "]
+          children: [thing.led === 'null' ? '' : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+              children: [" Light: ", thing.led === '-1' ? 'not set' : thing.led, " "]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+              onClick: function onClick() {
+                return toggleButton(thing);
+              },
+              children: " Toggle "
+            })]
           }), thing.sound === 'null' ? '' : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
             children: [" Sound: ", thing.sound === '-1' ? 'not set' : thing.sound, " "]
           }), thing.temp === 'null' ? '' : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
@@ -22970,7 +23027,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 ___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css?family=Montserrat:400,800);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n\tbox-sizing: border-box;\n}\n\n.Login {\n\tbackground: #f6f5f7;\n\tdisplay: flex;\n\tjustify-content: center;\n\talign-items: center;\n\tflex-direction: column;\n\tfont-family: 'Montserrat', sans-serif;\n\theight: 100vh;\n\tmargin: -20px 0 50px;\n}\n\nh1 {\n\tfont-weight: bold;\n\tmargin: 0;\n}\n\nh2 {\n\ttext-align: center;\n}\n\np {\n\tfont-size: 14px;\n\tfont-weight: 100;\n\tline-height: 20px;\n\tletter-spacing: 0.5px;\n\tmargin: 20px 0 30px;\n}\n\nspan {\n\tfont-size: 12px;\n}\n\na {\n\tcolor: #333;\n\tfont-size: 14px;\n\ttext-decoration: none;\n\tmargin: 15px 0;\n}\n\nbutton {\n\tborder-radius: 20px;\n\tborder: 1px solid #FF4B2B;\n\tbackground-color: #FF4B2B;\n\tcolor: #FFFFFF;\n\tfont-size: 12px;\n\tfont-weight: bold;\n\tpadding: 12px 45px;\n\tletter-spacing: 1px;\n\ttext-transform: uppercase;\n\ttransition: transform 80ms ease-in;\n}\n\nbutton:active {\n\ttransform: scale(0.95);\n}\n\nbutton:focus {\n\toutline: none;\n}\n\nbutton.ghost {\n\tbackground-color: transparent;\n\tborder-color: #FFFFFF;\n}\n\nform {\n\tbackground-color: #FFFFFF;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tflex-direction: column;\n\tpadding: 0 50px;\n\theight: 100%;\n\ttext-align: center;\n}\n\ninput {\n\tbackground-color: #eee;\n\tborder: none;\n\tpadding: 12px 15px;\n\tmargin: 8px 0;\n\twidth: 100%;\n}\n\n.container {\n\tbackground-color: #fff;\n\tborder-radius: 10px;\n  \tbox-shadow: 0 14px 28px rgba(0,0,0,0.25), \n\t\t\t0 10px 10px rgba(0,0,0,0.22);\n\tposition: relative;\n\toverflow: hidden;\n\twidth: 768px;\n\tmax-width: 100%;\n\tmin-height: 480px;\n}\n\n.form-container {\n\tposition: absolute;\n\ttop: 0;\n\theight: 100%;\n\ttransition: all 0.6s ease-in-out;\n}\n\n.sign-in-container {\n\tleft: 0;\n\twidth: 50%;\n\tz-index: 2;\n}\n\n.container.right-panel-active .sign-in-container {\n\ttransform: translateX(100%);\n}\n\n.sign-up-container {\n\tleft: 0;\n\twidth: 50%;\n\topacity: 0;\n\tz-index: 1;\n}\n\n.container.right-panel-active .sign-up-container {\n\ttransform: translateX(100%);\n\topacity: 1;\n\tz-index: 5;\n\t-webkit-animation: show 0.6s;\n\t        animation: show 0.6s;\n}\n\n@-webkit-keyframes show {\n\t0%, 49.99% {\n\t\topacity: 0;\n\t\tz-index: 1;\n\t}\n\t\n\t50%, 100% {\n\t\topacity: 1;\n\t\tz-index: 5;\n\t}\n}\n\n@keyframes show {\n\t0%, 49.99% {\n\t\topacity: 0;\n\t\tz-index: 1;\n\t}\n\t\n\t50%, 100% {\n\t\topacity: 1;\n\t\tz-index: 5;\n\t}\n}\n\n.overlay-container {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 50%;\n\twidth: 50%;\n\theight: 100%;\n\toverflow: hidden;\n\ttransition: transform 0.6s ease-in-out;\n\tz-index: 100;\n}\n\n.container.right-panel-active .overlay-container{\n\ttransform: translateX(-100%);\n}\n\n.overlay {\n\tbackground: #FF416C;\n\tbackground: linear-gradient(to right, #FF4B2B, #FF416C);\n\tbackground-repeat: no-repeat;\n\tbackground-size: cover;\n\tbackground-position: 0 0;\n\tcolor: #FFFFFF;\n\tposition: relative;\n\tleft: -100%;\n\theight: 100%;\n\twidth: 200%;\n  \ttransform: translateX(0);\n\ttransition: transform 0.6s ease-in-out;\n}\n\n.container.right-panel-active .overlay {\n  \ttransform: translateX(50%);\n}\n\n.overlay-panel {\n\tposition: absolute;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tflex-direction: column;\n\tpadding: 0 40px;\n\ttext-align: center;\n\ttop: 0;\n\theight: 100%;\n\twidth: 50%;\n\ttransform: translateX(0);\n\ttransition: transform 0.6s ease-in-out;\n}\n\n.overlay-left {\n\ttransform: translateX(-20%);\n}\n\n.container.right-panel-active .overlay-left {\n\ttransform: translateX(0);\n}\n\n.overlay-right {\n\tright: 0;\n\ttransform: translateX(0);\n}\n\n.container.right-panel-active .overlay-right {\n\ttransform: translateX(20%);\n}\n\n.social-container {\n\tmargin: 20px 0;\n}\n\n.social-container a {\n\tborder: 1px solid #DDDDDD;\n\tborder-radius: 50%;\n\tdisplay: inline-flex;\n\tjustify-content: center;\n\talign-items: center;\n\tmargin: 0 5px;\n\theight: 40px;\n\twidth: 40px;\n}\n\nfooter {\n    background-color: #222;\n    color: #fff;\n    font-size: 14px;\n    bottom: 0;\n    position: fixed;\n    left: 0;\n    right: 0;\n    text-align: center;\n    z-index: 999;\n}\n\nfooter p {\n    margin: 10px 0;\n}\n\nfooter i {\n    color: red;\n}\n\nfooter a {\n    color: #3c97bf;\n    text-decoration: none;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\r\n\tbox-sizing: border-box;\r\n}\r\n\r\n.Login {\r\n\tbackground: #f6f5f7;\r\n\tdisplay: flex;\r\n\tjustify-content: center;\r\n\talign-items: center;\r\n\tflex-direction: column;\r\n\tfont-family: 'Montserrat', sans-serif;\r\n\theight: 100vh;\r\n\tmargin: -20px 0 50px;\r\n}\r\n\r\nh1 {\r\n\tfont-weight: bold;\r\n\tmargin: 0;\r\n}\r\n\r\nh2 {\r\n\ttext-align: center;\r\n}\r\n\r\np {\r\n\tfont-size: 14px;\r\n\tfont-weight: 100;\r\n\tline-height: 20px;\r\n\tletter-spacing: 0.5px;\r\n\tmargin: 20px 0 30px;\r\n}\r\n\r\nspan {\r\n\tfont-size: 12px;\r\n}\r\n\r\na {\r\n\tcolor: #333;\r\n\tfont-size: 14px;\r\n\ttext-decoration: none;\r\n\tmargin: 15px 0;\r\n}\r\n\r\nbutton {\r\n\tborder-radius: 20px;\r\n\tborder: 1px solid #FF4B2B;\r\n\tbackground-color: #FF4B2B;\r\n\tcolor: #FFFFFF;\r\n\tfont-size: 12px;\r\n\tfont-weight: bold;\r\n\tpadding: 12px 45px;\r\n\tletter-spacing: 1px;\r\n\ttext-transform: uppercase;\r\n\ttransition: transform 80ms ease-in;\r\n}\r\n\r\nbutton:active {\r\n\ttransform: scale(0.95);\r\n}\r\n\r\nbutton:focus {\r\n\toutline: none;\r\n}\r\n\r\nbutton.ghost {\r\n\tbackground-color: transparent;\r\n\tborder-color: #FFFFFF;\r\n}\r\n\r\nform {\r\n\tbackground-color: #FFFFFF;\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: center;\r\n\tflex-direction: column;\r\n\tpadding: 0 50px;\r\n\theight: 100%;\r\n\ttext-align: center;\r\n}\r\n\r\ninput {\r\n\tbackground-color: #eee;\r\n\tborder: none;\r\n\tpadding: 12px 15px;\r\n\tmargin: 8px 0;\r\n\twidth: 100%;\r\n}\r\n\r\n.container {\r\n\tbackground-color: #fff;\r\n\tborder-radius: 10px;\r\n  \tbox-shadow: 0 14px 28px rgba(0,0,0,0.25), \r\n\t\t\t0 10px 10px rgba(0,0,0,0.22);\r\n\tposition: relative;\r\n\toverflow: hidden;\r\n\twidth: 768px;\r\n\tmax-width: 100%;\r\n\tmin-height: 480px;\r\n}\r\n\r\n.form-container {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\theight: 100%;\r\n\ttransition: all 0.6s ease-in-out;\r\n}\r\n\r\n.sign-in-container {\r\n\tleft: 0;\r\n\twidth: 50%;\r\n\tz-index: 2;\r\n}\r\n\r\n.container.right-panel-active .sign-in-container {\r\n\ttransform: translateX(100%);\r\n}\r\n\r\n.sign-up-container {\r\n\tleft: 0;\r\n\twidth: 50%;\r\n\topacity: 0;\r\n\tz-index: 1;\r\n}\r\n\r\n.container.right-panel-active .sign-up-container {\r\n\ttransform: translateX(100%);\r\n\topacity: 1;\r\n\tz-index: 5;\r\n\t-webkit-animation: show 0.6s;\r\n\t        animation: show 0.6s;\r\n}\r\n\r\n@-webkit-keyframes show {\r\n\t0%, 49.99% {\r\n\t\topacity: 0;\r\n\t\tz-index: 1;\r\n\t}\r\n\t\r\n\t50%, 100% {\r\n\t\topacity: 1;\r\n\t\tz-index: 5;\r\n\t}\r\n}\r\n\r\n@keyframes show {\r\n\t0%, 49.99% {\r\n\t\topacity: 0;\r\n\t\tz-index: 1;\r\n\t}\r\n\t\r\n\t50%, 100% {\r\n\t\topacity: 1;\r\n\t\tz-index: 5;\r\n\t}\r\n}\r\n\r\n.overlay-container {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tleft: 50%;\r\n\twidth: 50%;\r\n\theight: 100%;\r\n\toverflow: hidden;\r\n\ttransition: transform 0.6s ease-in-out;\r\n\tz-index: 100;\r\n}\r\n\r\n.container.right-panel-active .overlay-container{\r\n\ttransform: translateX(-100%);\r\n}\r\n\r\n.overlay {\r\n\tbackground: #FF416C;\r\n\tbackground: linear-gradient(to right, #FF4B2B, #FF416C);\r\n\tbackground-repeat: no-repeat;\r\n\tbackground-size: cover;\r\n\tbackground-position: 0 0;\r\n\tcolor: #FFFFFF;\r\n\tposition: relative;\r\n\tleft: -100%;\r\n\theight: 100%;\r\n\twidth: 200%;\r\n  \ttransform: translateX(0);\r\n\ttransition: transform 0.6s ease-in-out;\r\n}\r\n\r\n.container.right-panel-active .overlay {\r\n  \ttransform: translateX(50%);\r\n}\r\n\r\n.overlay-panel {\r\n\tposition: absolute;\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: center;\r\n\tflex-direction: column;\r\n\tpadding: 0 40px;\r\n\ttext-align: center;\r\n\ttop: 0;\r\n\theight: 100%;\r\n\twidth: 50%;\r\n\ttransform: translateX(0);\r\n\ttransition: transform 0.6s ease-in-out;\r\n}\r\n\r\n.overlay-left {\r\n\ttransform: translateX(-20%);\r\n}\r\n\r\n.container.right-panel-active .overlay-left {\r\n\ttransform: translateX(0);\r\n}\r\n\r\n.overlay-right {\r\n\tright: 0;\r\n\ttransform: translateX(0);\r\n}\r\n\r\n.container.right-panel-active .overlay-right {\r\n\ttransform: translateX(20%);\r\n}\r\n\r\n.social-container {\r\n\tmargin: 20px 0;\r\n}\r\n\r\n.social-container a {\r\n\tborder: 1px solid #DDDDDD;\r\n\tborder-radius: 50%;\r\n\tdisplay: inline-flex;\r\n\tjustify-content: center;\r\n\talign-items: center;\r\n\tmargin: 0 5px;\r\n\theight: 40px;\r\n\twidth: 40px;\r\n}\r\n\r\nfooter {\r\n    background-color: #222;\r\n    color: #fff;\r\n    font-size: 14px;\r\n    bottom: 0;\r\n    position: fixed;\r\n    left: 0;\r\n    right: 0;\r\n    text-align: center;\r\n    z-index: 999;\r\n}\r\n\r\nfooter p {\r\n    margin: 10px 0;\r\n}\r\n\r\nfooter i {\r\n    color: red;\r\n}\r\n\r\nfooter a {\r\n    color: #3c97bf;\r\n    text-decoration: none;\r\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -22994,7 +23051,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".modules {\n    margin-left: 40px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".modules {\r\n    margin-left: 40px;\r\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -23018,7 +23075,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".Dashboard {\n    margin: 50px;\n}\n\n.form-thing-info {\n    width: 450px;\n    margin: 5px;\n    padding: 10px;\n}\n\n.add-button {\n    float: right;\n}\n\n.thingType {\n    border: solid black 1px;\n}\n\n.logout-btn {\n    position:absolute;\n    right:50px;\n    top:50px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".Dashboard {\r\n    margin: 50px;\r\n}\r\n\r\n.form-thing-info {\r\n    width: 450px;\r\n    margin: 5px;\r\n    padding: 10px;\r\n}\r\n\r\n.add-button {\r\n    float: right;\r\n}\r\n\r\n.thingType {\r\n    border: solid black 1px;\r\n}\r\n\r\n.logout-btn {\r\n    position:absolute;\r\n    right:50px;\r\n    top:50px;\r\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
