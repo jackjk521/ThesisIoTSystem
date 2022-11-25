@@ -10,6 +10,7 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@babel/preset-react": "^7.13.13",
         "@popperjs/core": "^2.10.2",
         "@vitejs/plugin-react": "^2.0.0",
         "axios": "^0.27",
@@ -29,22 +30,17 @@
         "sass": "^1.32.11",
         "sass-loader": "^12.1.0",
         "tls-browserify": "^0.2.2",
-        "vite": "^3.0.0",
-        "@babel/preset-react": "^7.13.13"
+        "vite": "^3.0.0"
     },
     "dependencies": {
         "@arduino/arduino-iot-client": "^1.4.1",
         "@babel/preset-react": "^7.18.6",
-        "cors-anywhere": "^0.4.4",
-        "mqtt": "^4.3.7",
-        "node-libs-browser": "^2.2.1",
-        "react-router-dom": "^6.3.0",
-        "styled-components": "^5.3.5",
         "antd": "^4.22.2",
         "axios": "^0.27.2",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",
+        "cors-anywhere": "^0.4.4",
         "dotenv": "^16.0.2",
         "express": "^4.18.1",
         "jsonwebtoken": "^8.5.1",
@@ -52,11 +48,15 @@
         "mdb-react-ui-kit": "^4.1.0",
         "mongodb": "^4.10.0",
         "mongoose": "^6.5.0",
+        "mqtt": "^4.3.7",
+        "node-libs-browser": "^2.2.1",
         "nodemon": "^2.0.19",
         "passport": "^0.6.0",
         "passport-jwt": "^4.0.0",
         "react-bootstrap": "^2.4.0",
         "react-icons": "^4.4.0",
-        "react-modal": "^3.15.1"
+        "react-modal": "^3.15.1",
+        "react-router-dom": "^6.3.0",
+        "styled-components": "^5.3.5"
     }
 }

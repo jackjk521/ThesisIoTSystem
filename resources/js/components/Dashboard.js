@@ -8,6 +8,7 @@ import mqtt from "mqtt";
 
 const Main = () => {
   const navigate = useNavigate();
+  const [test, setTest] = useState([])
   const [things, setThings] = useState([]);
   const [thingName, setThingName] = useState('');
   const [thingType, setThingType] = useState('led');
@@ -19,6 +20,11 @@ const Main = () => {
   const localhost = 'http://127.0.0.1:8000/api';
   const proxy = 'http://localhost:8080';
   // const bearer = localStorage.getItem('token');
+  let config = {
+    headers: {
+      'Authorization': localStorage.getItem('token')
+    }
+  }
 
   const thingNameHandler = (e) => {
     setThingName(e.target.value);
@@ -66,7 +72,7 @@ const Main = () => {
 
   useEffect(async () => {
     const token = localStorage.getItem('token');
-    console.log(token) // for testing
+    // console.log(token) // for testing
 
     axios.get("http://localhost:3001/dashboard", {
         headers : {
@@ -78,38 +84,54 @@ const Main = () => {
         console.log(err)
         navigate('/')
     })
-
+    // console.log(`userId: ${sessionStorage.getItem('user_id')}`)
     const req = {
       params : {
         user_id : sessionStorage.getItem('user_id')
       }
     };
-    const res = await axios.get(`${proxy}/${localhost}/getThings`, req);
+    const res = await axios.get(`${proxy}/${localhost}/getThings`, req, config);
     const thingList = res.data;
+    console.log(thingList)
+    setThings(thingList);
+    setTest(thingList)
 
-    const sensors = ['sound', 'temp', 'motion', 'heart'];
+    console.log(thingList)
+    const sensors = ['led', 'sound', 'temp', 'motion', 'heart'];
     thingList.map(thing => {
       sensors.forEach((sensor) => {
         if(thing[sensor] != 'null') {
-          client.subscribe(`${thing.name}/${sensor}`);
-          console.log(`subscribed to ${thing.name}/${sensor}`);
+          client.subscribe(`/${thing.name}/${sensor}`);
+          console.log(`subscribed to /${thing.name}/${sensor}`);
         }
       });
     });
+  }, []);
 
-    client.on('message', async function(topic, message) {
+  useEffect(async () => {
+    console.log("thing list updated")
+    console.log(things)
+
+    const fun = async (topic, message) => {
+      console.log('message received')
+      console.log(test)
       const topicArr = topic.split('/');
-      const res = await axios.get('findThing', {params: {'name' : topicArr[0]}});
+      const res = await axios.get(`${proxy}/${localhost}/findThing`, {params: {'name' : topicArr[1]}});
+      const msg = message.toString()
       if(res.data.status == 200) {
-        const update = await axios.patch('updateThing', {'name' : topicArr[0], 'sensor' : topicArr[1], 'value' : message});
+        console.log(message.toString())
+        const update = await axios.patch(`${proxy}/${localhost}/updateThing` , {'name' : topicArr[1], 'sensor' : topicArr[1], 'value' : msg});
       }
       let current = things;
-      current.find(thing => thing.name === topicArr[0])[topicArr[1]] = message;
-      setThings([...current]);
-    });
+      console.log(current)
+      console.log(current.find(thing => thing.name === topicArr[1]))
+      // current.find(thing => thing.name === topicArr[1])[topicArr[2]] = msg;
+      // setThings([...current]);
+    }
 
-    setThings(thingList);
-  }, []);
+    client.on('message', fun );
+
+  }, [things]);
 
   //added to avoid loginging in again after being authenticated
     useEffect(() => {
@@ -145,7 +167,7 @@ const Main = () => {
 
         <MessageQueue messages={messages} removeMessage={removeMessage} />
         <button type='button' onClick={logOut} className='logout-btn' > Logout </button>
-        <Things things = {things} setThings = {setThings} />
+        <Things things = {things} setThings = {setThings} client = {client} />
     </div> 
     );
 };

@@ -50,6 +50,8 @@ const Login = () => {
             });
             // adding the JWS token in a localStorage
             const token = localStorage.setItem('token', res.data.token);
+            // console.log(`userId: ${res.data.user_id}`)
+            sessionStorage.setItem('user_id', res.data.user_id);
             console.log(token)
             navigate("/dashboard");
         } else {
