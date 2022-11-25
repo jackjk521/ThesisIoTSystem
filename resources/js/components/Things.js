@@ -1,10 +1,9 @@
 import React from 'react';
 import '../../css/Things.css';
 
-const Things = ({things, setThings, client}) => {
+const Things = ({things, client}) => {
     const toggleButton = (thing) => {
-        console.log((thing.led === '-1')? "1" : parseInt(thing.led).toString())
-        client.publish(`/${thing.name}/led`, (thing.led === '-1')? "1" : parseInt(thing.led).toString(), (err) => {console.log(err? err : "success")})
+        client.publish(`/${thing.name}/led`, (thing.led === '-1')? "1" : (parseInt(thing.led)? "0" : "1"))
     }
    
     return (

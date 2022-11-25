@@ -7862,8 +7862,6 @@ var Main = function Main() {
             thingList = res.data;
             console.log(thingList);
             setThings(thingList);
-            setTest(thingList);
-            console.log(thingList);
             sensors = ['led', 'sound', 'temp', 'motion', 'heart'];
             thingList.map(function (thing) {
               sensors.forEach(function (sensor) {
@@ -7874,7 +7872,7 @@ var Main = function Main() {
               });
             });
 
-          case 13:
+          case 11:
           case "end":
             return _context2.stop();
         }
@@ -7887,19 +7885,16 @@ var Main = function Main() {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            console.log("thing list updated");
-            console.log(things);
-
             fun = /*#__PURE__*/function () {
               var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(topic, message) {
-                var topicArr, res, msg, update, current;
+                var topicArr, name, sensor, res, msg;
                 return _regeneratorRuntime().wrap(function _callee3$(_context3) {
                   while (1) {
                     switch (_context3.prev = _context3.next) {
                       case 0:
-                        console.log('message received');
-                        console.log(test);
                         topicArr = topic.split('/');
+                        name = topicArr[1];
+                        sensor = topicArr[2];
                         _context3.next = 5;
                         return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat(proxy, "/").concat(localhost, "/findThing"), {
                           params: {
@@ -7912,30 +7907,25 @@ var Main = function Main() {
                         msg = message.toString();
 
                         if (!(res.data.status == 200)) {
-                          _context3.next = 12;
+                          _context3.next = 10;
                           break;
                         }
 
-                        console.log(message.toString());
-                        _context3.next = 11;
+                        _context3.next = 10;
                         return axios__WEBPACK_IMPORTED_MODULE_0___default().patch("".concat(proxy, "/").concat(localhost, "/updateThing"), {
                           'name': topicArr[1],
-                          'sensor': topicArr[1],
+                          'sensor': topicArr[2],
                           'value': msg
                         });
 
+                      case 10:
+                        setTest({
+                          name: name,
+                          sensor: sensor,
+                          msg: msg
+                        });
+
                       case 11:
-                        update = _context3.sent;
-
-                      case 12:
-                        current = things;
-                        console.log(current);
-                        console.log(current.find(function (thing) {
-                          return thing.name === topicArr[1];
-                        })); // current.find(thing => thing.name === topicArr[1])[topicArr[2]] = msg;
-                        // setThings([...current]);
-
-                      case 15:
                       case "end":
                         return _context3.stop();
                     }
@@ -7950,13 +7940,26 @@ var Main = function Main() {
 
             client.on('message', fun);
 
-          case 4:
+          case 2:
           case "end":
             return _context4.stop();
         }
       }
     }, _callee4);
-  })), [things]); //added to avoid loginging in again after being authenticated
+  })), []);
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    console.log(test.msg);
+    var current = things;
+    var x = current.find(function (thing) {
+      return test.name === thing.name;
+    });
+    console.log(x);
+
+    if (x) {
+      x[test.sensor] = test.msg;
+      setThings(_toConsumableArray(things));
+    }
+  }, [test]); //added to avoid loginging in again after being authenticated
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var token = localStorage.getItem('token');
@@ -8561,7 +8564,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _css_Things_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../css/Things.css */ "./resources/css/Things.css");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 
@@ -8570,14 +8572,10 @@ __webpack_require__.r(__webpack_exports__);
 
 var Things = function Things(_ref) {
   var things = _ref.things,
-      setThings = _ref.setThings,
       client = _ref.client;
 
   var toggleButton = function toggleButton(thing) {
-    console.log(thing.led === '-1' ? "1" : parseInt(thing.led).toString());
-    client.publish("/".concat(thing.name, "/led"), thing.led === '-1' ? "1" : parseInt(thing.led).toString(), function (err) {
-      console.log(err ? err : "success");
-    });
+    client.publish("/".concat(thing.name, "/led"), thing.led === '-1' ? "1" : parseInt(thing.led) ? "0" : "1");
   };
 
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
