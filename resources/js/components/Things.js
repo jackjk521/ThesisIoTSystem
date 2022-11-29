@@ -2,11 +2,17 @@ import React from 'react';
 import '../../css/Things.css';
 
 const Things = ({things, setThings, client}) => {
+   
     const toggleButton = (thing) => {
         console.log((thing.led === '-1')? "1" : parseInt(thing.led).toString())
+        console.log(things);
         client.publish(`/${thing.name}/led`, (thing.led === '-1')? "1" : parseInt(thing.led).toString(), (err) => {console.log(err? err : "success")})
     }
    
+    useEffect(() => {
+            setThings(things)
+      }, [things]);
+
     return (
         <div className='things'>
             {

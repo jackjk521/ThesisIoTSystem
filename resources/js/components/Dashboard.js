@@ -123,7 +123,7 @@ const Main = () => {
         const update = await axios.patch(`${proxy}/${localhost}/updateThing` , {'name' : topicArr[1], 'sensor' : topicArr[1], 'value' : msg});
       }
       let current = things;
-      console.log(current)
+      console.log("This is current equals things: " + current)
       console.log(current.find(thing => thing.name === topicArr[1]))
       // current.find(thing => thing.name === topicArr[1])[topicArr[2]] = msg;
       // setThings([...current]);
