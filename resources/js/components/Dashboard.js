@@ -94,9 +94,7 @@ const Main = () => {
     const thingList = res.data;
     console.log(thingList)
     setThings(thingList);
-    setTest(thingList)
 
-    console.log(thingList)
     const sensors = ['led', 'sound', 'temp', 'motion', 'heart'];
     thingList.map(thing => {
       sensors.forEach((sensor) => {
@@ -109,29 +107,31 @@ const Main = () => {
   }, []);
 
   useEffect(async () => {
-    console.log("thing list updated")
-    console.log(things)
-
     const fun = async (topic, message) => {
-      console.log('message received')
-      console.log(test)
       const topicArr = topic.split('/');
+      const name = topicArr[1]
+      const sensor = topicArr[2]
       const res = await axios.get(`${proxy}/${localhost}/findThing`, {params: {'name' : topicArr[1]}});
       const msg = message.toString()
       if(res.data.status == 200) {
-        console.log(message.toString())
-        const update = await axios.patch(`${proxy}/${localhost}/updateThing` , {'name' : topicArr[1], 'sensor' : topicArr[1], 'value' : msg});
+        await axios.patch(`${proxy}/${localhost}/updateThing` , {'name' : topicArr[1], 'sensor' : topicArr[2], 'value' : msg});
       }
-      let current = things;
-      console.log("This is current equals things: " + current)
-      console.log(current.find(thing => thing.name === topicArr[1]))
-      // current.find(thing => thing.name === topicArr[1])[topicArr[2]] = msg;
-      // setThings([...current]);
+      setTest({name, sensor, msg})
     }
 
     client.on('message', fun );
+  }, []);
 
-  }, [things]);
+  useEffect(() => {
+    console.log(test.msg)
+    let current = things 
+    let x = current.find(thing => test.name === thing.name)
+    console.log(x)
+    if(x) {
+      x[test.sensor] = test.msg
+      setThings([...things])
+    }
+  }, [test]);
 
   //added to avoid loginging in again after being authenticated
     useEffect(() => {
