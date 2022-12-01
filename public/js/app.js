@@ -7992,14 +7992,17 @@ var Main = function Main() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
               "class": "card-title",
               children: "Dashboard"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h6", {
-              "class": "card-subtitle mb-2 text-muted",
-              children: "Thing type: "
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("label", {
+              children: "Thing Name: "
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
               name: "name",
+              className: "my-3",
               value: thingType,
               onChange: thingTypeHandler,
               placeholder: "Thing Name"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h6", {
+              "class": "card-subtitle mb-2 text-muted",
+              children: "Thing type: "
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("select", {
               className: "border border-1 m-2",
               value: thingType,

@@ -158,8 +158,9 @@ const Main = () => {
             <div className="row">
               <div className= "col-12">
                 <h5 class="card-title">Dashboard</h5>
+                <label>Thing Name: </label>
+                <input name = "name" className="my-3" value={thingType} onChange={thingTypeHandler} placeholder="Thing Name"/>
                 <h6 class="card-subtitle mb-2 text-muted">Thing type: </h6>
-                <input name = "name" value={thingType} onChange={thingTypeHandler} placeholder="Thing Name"/>
                 <select className='border border-1 m-2' value={thingType} onChange={thingTypeHandler}>
                     <option value='led'> Light </option>
                     <option value='sound'> Sound </option>
