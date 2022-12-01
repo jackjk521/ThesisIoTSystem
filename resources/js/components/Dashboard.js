@@ -152,23 +152,32 @@ const Main = () => {
 
   return (
     <div className="Dashboard">
-        <div className="form-thing-info">
-          <input type='text' name='thingName' onChange={thingNameHandler} placeholder='Thing Name Here' />
-          <label> Thing type: </label>
-          <select className='thingType' value={thingType} onChange={thingTypeHandler}>
-            <option value='led'> Light </option>
-            <option value='sound'> Sound </option>
-            <option value='temp'> Temperature </option>
-            <option value='motion'> Motion </option>
-            <option value='heart'> Heart Rate </option>
-          </select>
-          <button type='button' onClick={addThing} className='add-button'> Create Thing </button>
+      <button className ='btn btn-danger m-2' onClick={logOut} > Logout </button>
+         <div class="card">
+          <div class="card-body">
+            <div className="row">
+              <div className= "col-12">
+                <h5 class="card-title">Dashboard</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Thing type: </h6>
+                <input name = "name" value={thingType} onChange={thingTypeHandler} placeholder="Thing Name"/>
+                <select className='border border-1 m-2' value={thingType} onChange={thingTypeHandler}>
+                    <option value='led'> Light </option>
+                    <option value='sound'> Sound </option>
+                    <option value='temp'> Temperature </option>
+                    <option value='motion'> Motion </option>
+                    <option value='heart'> Heart Rate </option>
+                  </select>
+              </div>
+              <div className= "col-12">
+                <button type='button' className ="btn btn-danger" onClick={addThing}> Create Thing </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <MessageQueue messages={messages} removeMessage={removeMessage} />
-        <button type='button' onClick={logOut} className='logout-btn' > Logout </button>
         <Things things = {things} setThings = {setThings} client = {client} />
-    </div> 
+    </div>  
     );
 };
 
