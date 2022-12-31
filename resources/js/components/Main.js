@@ -11,10 +11,6 @@ function Main() {
     return (
         <BrowserRouter>
             <div className="Main">
-                <div className='Menu'>
-                    <span className='Menu'> <Link to="/"> Home </Link></span>
-                    <span className='Menu'> <Link to="/dashboard"> Dashboard </Link></span>
-                </div>
                 <Routes>
                     <Route path="/" element = {<Login/>}/>
                     <Route path="/dashboard" element = {<Dashboard/>}/>

@@ -159,7 +159,7 @@ const Main = () => {
               <div className= "col-12">
                 <h5 class="card-title">Dashboard</h5>
                 <label>Thing Name: </label>
-                <input name = "name" className="my-3" value={thingType} onChange={thingTypeHandler} placeholder="Thing Name"/>
+                <input name = "name" className="my-3" value={thingName} onChange={thingNameHandler} placeholder="Thing Name"/>
                 <h6 class="card-subtitle mb-2 text-muted">Thing type: </h6>
                 <select className='border border-1 m-2' value={thingType} onChange={thingTypeHandler}>
                     <option value='led'> Light </option>
@@ -168,9 +168,10 @@ const Main = () => {
                     <option value='motion'> Motion </option>
                     <option value='heart'> Heart Rate </option>
                   </select>
+                  <button type='button' className ="btn btn-danger" onClick={addThing}> Create Thing </button>
               </div>
               <div className= "col-12">
-                <button type='button' className ="btn btn-danger" onClick={addThing}> Create Thing </button>
+               
               </div>
             </div>
           </div>
